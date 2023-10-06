@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://bhj6vcmatg6vi"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n1wcw"]
+size = Vector2(32, 48)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_6wrau"]
+size = Vector2(32, 48)
+
+[node name="Player" type="CharacterBody2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+process_callback = 0
+position_smoothing_enabled = true
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+drag_left_margin = 0.1
+drag_top_margin = 0.1
+drag_right_margin = 0.1
+drag_bottom_margin = 0.1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_n1wcw")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("PlaceholderTexture2D_6wrau")
