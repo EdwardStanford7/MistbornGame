@@ -17,6 +17,12 @@ jump_velocity = -600.0
 [node name="Floor" parent="." instance=ExtResource("3_0ebi8")]
 position = Vector2(-256, 0)
 
+[node name="Floor3" parent="." instance=ExtResource("3_0ebi8")]
+position = Vector2(-256, -544)
+
+[node name="Floor4" parent="." instance=ExtResource("3_0ebi8")]
+position = Vector2(256, -544)
+
 [node name="Wall" parent="." instance=ExtResource("4_dx8b0")]
 position = Vector2(-496, -272)
 
@@ -27,7 +33,15 @@ position = Vector2(496, -272)
 position = Vector2(256, 0)
 
 [node name="MetalPlate" parent="." instance=ExtResource("5_hik5q")]
-position = Vector2(0, -12)
+position = Vector2(15, -12)
+
+[node name="MetalPlate3" parent="." instance=ExtResource("5_hik5q")]
+position = Vector2(-75, -532)
 
 [node name="MetalPlate2" parent="." instance=ExtResource("5_hik5q")]
-position = Vector2(256, -12)
+position = Vector2(484, -200)
+rotation = 1.5708
+
+[node name="MetalPlate4" parent="." instance=ExtResource("5_hik5q")]
+position = Vector2(-484, -300)
+rotation = 1.5708

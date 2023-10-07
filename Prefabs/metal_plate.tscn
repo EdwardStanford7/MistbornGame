@@ -1,4 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://soiho4lbqcva"]
+[gd_scene load_steps=4 format=3 uid="uid://soiho4lbqcva"]
+
+[ext_resource type="Script" path="res://Scripts/metal_plate.gd" id="1_us400"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p2fnx"]
 size = Vector2(32, 8)
@@ -7,6 +9,7 @@ size = Vector2(32, 8)
 size = Vector2(32, 8)
 
 [node name="StaticBody2D2" type="StaticBody2D" groups=["Metal"]]
+script = ExtResource("1_us400")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_p2fnx")

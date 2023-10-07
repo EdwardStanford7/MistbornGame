@@ -8,6 +8,7 @@ extends CharacterBody2D
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+var selected_metal
 
 func _physics_process(delta):
 	handle_gravity(delta)
@@ -37,30 +38,36 @@ func handle_move_input(delta):
 		velocity.x *= air_momentum * delta
 
 func handle_iron_steel_input(delta):
-	if Input.is_action_just_pressed("pull") && Input.is_action_just_pressed("push"):
+	var pulling = Input.is_action_pressed("pull")
+	var pushing = Input.is_action_pressed("push")
+	
+	if pulling && pushing:
+		return
+		
+	if !selected_metal:
+		var target = get_target_metal()
+		if !target:
+			return
+		else:
+			selected_metal = target
+	
+	if pulling:
+		velocity += selected_metal.pull(position, mass, pull_push_strength)
 		return
 	
-	if Input.is_action_just_pressed("pull"):
-		print("pull")
-		var target: Object = get_target_metal()
-		if target:
-			print(target)
-	
-	if Input.is_action_just_pressed("push"):
-		print("push")
-		var target: Object = get_target_metal()
-		if target:
-			print(target)
+	if pushing:
+		velocity += selected_metal.push(position, mass, pull_push_strength)
+		return
+		
+	selected_metal = null
 
 func get_target_metal() -> Object:
-	var target_group: Array = get_tree().get_nodes_in_group("Metal");
-	if target_group.is_empty():
-		return null
-	var distance_away = get_viewport().get_mouse_position().distance_to(target_group[0].get_global_transform_with_canvas().origin)
-	var return_node = target_group[0]
-	for index in target_group.size():
-		var distance = get_viewport().get_mouse_position().distance_to(target_group[index].get_global_transform_with_canvas().origin)
-		if (distance < distance_away):
+	var distance_away = INF
+	var return_node = null
+	
+	for object in get_tree().get_nodes_in_group("Metal"):
+		var distance = get_viewport().get_mouse_position().distance_to(object.get_global_transform_with_canvas().origin)
+		if distance < distance_away && distance < 50:
 			distance_away = distance
-			return_node = target_group[index];
+			return_node = object;
 	return return_node
