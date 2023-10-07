@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://soiho4lbqcva"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p2fnx"]
+size = Vector2(32, 8)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_0v4bn"]
+size = Vector2(32, 8)
+
+[node name="StaticBody2D2" type="StaticBody2D" groups=["Metal"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_p2fnx")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 1, 1)
+texture = SubResource("PlaceholderTexture2D_0v4bn")
