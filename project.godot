@@ -53,6 +53,10 @@ jump={
 ]
 }
 
+[physics]
+
+2d/default_gravity=98000.0
+
 [rendering]
 
 renderer/rendering_method="mobile"
