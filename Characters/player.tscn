@@ -8,10 +8,10 @@ size = Vector2(32, 48)
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_6wrau"]
 size = Vector2(32, 48)
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("collision")]
+[node name="Player" type="CharacterBody2D"]
+top_level = true
 slide_on_ceiling = false
 script = ExtResource("1_7nm3l")
-collision = NodePath("CollisionShape2D")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 process_callback = 0

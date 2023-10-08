@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://ca3cll143cteb"]
+
+[ext_resource type="Script" path="res://Scripts/scene_transition.gd" id="1_1pnkb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qjsmu"]
+size = Vector2(48, 64)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_hg2l5"]
+size = Vector2(48, 64)
+
+[node name="SceneTransition" type="Area2D"]
+script = ExtResource("1_1pnkb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_qjsmu")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 0, 0, 1)
+texture = SubResource("PlaceholderTexture2D_hg2l5")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -32.0
+offset_top = -64.0
+offset_right = 32.0
+offset_bottom = -32.0
+theme_override_font_sizes/font_size = 10
+horizontal_alignment = 1
+autowrap_mode = 3

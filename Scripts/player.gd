@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-@export var collision: CollisionShape2D
+signal enter_loading_zone
 
 @export var friction: float = 0.075
 @export var speed_force: float = 200000 # ikik DC can suck a fat one
@@ -14,6 +14,9 @@ var selected_metal
 var force_per_frame: Vector2
 
 func _physics_process(delta):
+	if Input.is_action_just_pressed("enter_loading_zone"):
+		enter_loading_zone.emit()
+	
 	force_per_frame = Vector2(0, 0)
 	
 	handle_gravity()
@@ -35,7 +38,6 @@ func handle_friction():
 		return
 		
 	if is_on_wall():
-		var collision = get_slide_collision(0)
 		if force_per_frame.x < 0:
 			force_per_frame.y -= friction * abs(force_per_frame.x) * velocity.y / 10
 			return

@@ -1,0 +1,49 @@
+[gd_scene load_steps=6 format=3 uid="uid://3eeygptmkewu"]
+
+[ext_resource type="PackedScene" uid="uid://bhj6vcmatg6vi" path="res://Characters/player.tscn" id="1_m34t3"]
+[ext_resource type="PackedScene" uid="uid://4ky7npwoorln" path="res://Prefabs/floor.tscn" id="2_tg1kc"]
+[ext_resource type="PackedScene" uid="uid://jd44661cckq2" path="res://Prefabs/wall.tscn" id="3_mgtqk"]
+[ext_resource type="PackedScene" uid="uid://soiho4lbqcva" path="res://Prefabs/metal_plate.tscn" id="4_t6r12"]
+[ext_resource type="PackedScene" uid="uid://ca3cll143cteb" path="res://Prefabs/scene_transition.tscn" id="5_swe1n"]
+
+[node name="TestLevel" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_m34t3")]
+position = Vector2(58, -103)
+
+[node name="Floor" parent="." instance=ExtResource("2_tg1kc")]
+position = Vector2(-256, 0)
+
+[node name="Floor3" parent="." instance=ExtResource("2_tg1kc")]
+position = Vector2(-256, -544)
+
+[node name="Floor4" parent="." instance=ExtResource("2_tg1kc")]
+position = Vector2(256, -544)
+
+[node name="Wall" parent="." instance=ExtResource("3_mgtqk")]
+position = Vector2(-496, -272)
+
+[node name="Wall2" parent="." instance=ExtResource("3_mgtqk")]
+position = Vector2(496, -272)
+
+[node name="Floor2" parent="." instance=ExtResource("2_tg1kc")]
+position = Vector2(256, 0)
+
+[node name="MetalPlate" parent="." instance=ExtResource("4_t6r12")]
+position = Vector2(15, -12)
+
+[node name="MetalPlate3" parent="." instance=ExtResource("4_t6r12")]
+position = Vector2(-75, -532)
+
+[node name="MetalPlate2" parent="." instance=ExtResource("4_t6r12")]
+position = Vector2(484, -200)
+rotation = 1.5708
+
+[node name="MetalPlate4" parent="." instance=ExtResource("4_t6r12")]
+position = Vector2(-484, -300)
+rotation = 1.5708
+
+[node name="SceneTransition" parent="." instance=ExtResource("5_swe1n")]
+position = Vector2(-332, -48)
+scene_to_load = "res://Levels/main.tscn"
+label = "Back To Main"
