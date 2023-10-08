@@ -14,7 +14,7 @@ func _physics_process(delta):
 	handle_gravity(delta)
 	handle_jump_input()
 	handle_move_input(delta)
-	handle_iron_steel_input(delta)
+	handle_iron_steel_input()
 	
 	move_and_slide()
 
@@ -37,19 +37,19 @@ func handle_move_input(delta):
 	else:
 		velocity.x *= air_momentum * delta
 
-func handle_iron_steel_input(delta):
+func handle_iron_steel_input():
 	var pulling = Input.is_action_pressed("pull")
 	var pushing = Input.is_action_pressed("push")
 	
 	if pulling && pushing:
 		return
 		
+	var target = get_target_metal()
+	if target:
+		selected_metal = target
+			
 	if !selected_metal:
-		var target = get_target_metal()
-		if !target:
-			return
-		else:
-			selected_metal = target
+		return
 	
 	if pulling:
 		velocity += selected_metal.pull(position, mass, pull_push_strength)
@@ -67,7 +67,7 @@ func get_target_metal() -> Object:
 	
 	for object in get_tree().get_nodes_in_group("Metal"):
 		var distance = get_viewport().get_mouse_position().distance_to(object.get_global_transform_with_canvas().origin)
-		if distance < distance_away && distance < 50:
+		if distance < distance_away && distance < 75:
 			distance_away = distance
 			return_node = object;
 	return return_node
