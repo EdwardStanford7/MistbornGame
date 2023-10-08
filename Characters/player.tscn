@@ -1,4 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://bhj6vcmatg6vi"]
+[gd_scene load_steps=4 format=3 uid="uid://bhj6vcmatg6vi"]
+
+[ext_resource type="Script" path="res://Scripts/player.gd" id="1_7nm3l"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n1wcw"]
 size = Vector2(32, 48)
@@ -6,8 +8,10 @@ size = Vector2(32, 48)
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_6wrau"]
 size = Vector2(32, 48)
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("collision")]
 slide_on_ceiling = false
+script = ExtResource("1_7nm3l")
+collision = NodePath("CollisionShape2D")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 process_callback = 0

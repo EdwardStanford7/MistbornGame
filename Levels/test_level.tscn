@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://3eeygptmkewu"]
+[gd_scene load_steps=5 format=3 uid="uid://3eeygptmkewu"]
 
 [ext_resource type="PackedScene" uid="uid://bhj6vcmatg6vi" path="res://Characters/player.tscn" id="2_gekf6"]
 [ext_resource type="PackedScene" uid="uid://4ky7npwoorln" path="res://Prefabs/floor.tscn" id="3_0ebi8"]
-[ext_resource type="Script" path="res://Scripts/player.gd" id="3_7ucob"]
 [ext_resource type="PackedScene" uid="uid://jd44661cckq2" path="res://Prefabs/wall.tscn" id="4_dx8b0"]
 [ext_resource type="PackedScene" uid="uid://soiho4lbqcva" path="res://Prefabs/metal_plate.tscn" id="5_hik5q"]
 
@@ -10,9 +9,6 @@
 
 [node name="Player" parent="." instance=ExtResource("2_gekf6")]
 position = Vector2(58, -103)
-script = ExtResource("3_7ucob")
-speed = 300.0
-jump_velocity = -600.0
 
 [node name="Floor" parent="." instance=ExtResource("3_0ebi8")]
 position = Vector2(-256, 0)
