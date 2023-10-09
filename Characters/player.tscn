@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bhj6vcmatg6vi"]
+[gd_scene load_steps=5 format=3 uid="uid://bhj6vcmatg6vi"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_7nm3l"]
+[ext_resource type="Texture2D" uid="uid://d1m5h7tq2cy81" path="res://Art/basic_light.png" id="2_qnvka"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n1wcw"]
 size = Vector2(32, 48)
@@ -28,3 +29,8 @@ shape = SubResource("RectangleShape2D_n1wcw")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = SubResource("PlaceholderTexture2D_6wrau")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+energy = 10.0
+texture = ExtResource("2_qnvka")
+height = 1.0

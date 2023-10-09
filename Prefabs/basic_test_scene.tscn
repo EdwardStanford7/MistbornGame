@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://bbjtxxlhs333y"]
+
+[ext_resource type="PackedScene" uid="uid://bhj6vcmatg6vi" path="res://Characters/player.tscn" id="1_633nr"]
+[ext_resource type="PackedScene" uid="uid://4ky7npwoorln" path="res://Prefabs/floor.tscn" id="1_l4w2e"]
+[ext_resource type="PackedScene" uid="uid://jd44661cckq2" path="res://Prefabs/wall.tscn" id="2_7n32d"]
+[ext_resource type="PackedScene" uid="uid://ca3cll143cteb" path="res://Prefabs/scene_transition.tscn" id="4_lvhet"]
+
+[node name="basic_test_scene" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_633nr")]
+position = Vector2(143, -52)
+
+[node name="Floor" parent="." instance=ExtResource("1_l4w2e")]
+position = Vector2(-256, 0)
+
+[node name="Floor3" parent="." instance=ExtResource("1_l4w2e")]
+position = Vector2(-256, -544)
+
+[node name="Floor4" parent="." instance=ExtResource("1_l4w2e")]
+position = Vector2(256, -544)
+
+[node name="Wall" parent="." instance=ExtResource("2_7n32d")]
+position = Vector2(-496, -272)
+
+[node name="Wall2" parent="." instance=ExtResource("2_7n32d")]
+position = Vector2(496, -272)
+
+[node name="Floor2" parent="." instance=ExtResource("1_l4w2e")]
+position = Vector2(256, 0)
+
+[node name="SceneTransition" parent="." instance=ExtResource("4_lvhet")]
+position = Vector2(-350, -48)
+scene_to_load = "res://Levels/main.tscn"
+label = "Back To Main"

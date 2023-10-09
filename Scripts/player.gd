@@ -10,13 +10,15 @@ signal enter_loading_zone
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
-var selected_metal
 var force_per_frame: Vector2
+var selected_metal
+var tin_active: = false
 
 func _physics_process(delta):
-	if Input.is_action_just_pressed("enter_loading_zone"):
-		enter_loading_zone.emit()
+	handle_loading_zone_input()
+	handle_tin_input()
 	
+	# Physics actions
 	force_per_frame = Vector2(0, 0)
 	
 	handle_gravity()
@@ -28,6 +30,19 @@ func _physics_process(delta):
 	velocity += force_per_frame * delta / mass
 	
 	move_and_slide()
+
+func handle_tin_input():
+	if Input.is_action_just_pressed("tin"):
+		if tin_active:
+			self.get_child(3).set_texture(preload("res://Art/basic_light.png"))
+			tin_active = false
+		else:
+			self.get_child(3).set_texture(preload("res://Art/tin_light.png"))
+			tin_active = true
+
+func handle_loading_zone_input():
+	if Input.is_action_just_pressed("enter_loading_zone"):
+		enter_loading_zone.emit()
 
 func handle_friction():
 	if is_on_floor() && force_per_frame.y > 0:
@@ -60,8 +75,8 @@ func handle_move_input():
 			force_per_frame.x = direction * speed_force
 
 func handle_iron_steel_input():
-	var pulling = Input.is_action_pressed("pull")
-	var pushing = Input.is_action_pressed("push")
+	var pulling = Input.is_action_pressed("iron")
+	var pushing = Input.is_action_pressed("steel")
 	
 	if pulling && pushing:
 		return
