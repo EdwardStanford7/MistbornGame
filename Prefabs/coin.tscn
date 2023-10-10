@@ -7,6 +7,7 @@
 radius = 3.0
 
 [node name="Coin" type="RigidBody2D"]
+collision_layer = 2
 mass = 0.01
 continuous_cd = 2
 max_contacts_reported = 100
