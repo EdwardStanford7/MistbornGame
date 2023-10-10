@@ -14,20 +14,23 @@ position = Vector2(58, -103)
 [node name="Floor" parent="." instance=ExtResource("2_tg1kc")]
 position = Vector2(-256, 0)
 
+[node name="Floor2" parent="." instance=ExtResource("2_tg1kc")]
+position = Vector2(256, 0)
+
 [node name="Floor3" parent="." instance=ExtResource("2_tg1kc")]
 position = Vector2(-256, -544)
 
 [node name="Floor4" parent="." instance=ExtResource("2_tg1kc")]
 position = Vector2(256, -544)
 
+[node name="Floor5" parent="." instance=ExtResource("2_tg1kc")]
+position = Vector2(-10, -219)
+
 [node name="Wall" parent="." instance=ExtResource("3_mgtqk")]
 position = Vector2(-496, -272)
 
 [node name="Wall2" parent="." instance=ExtResource("3_mgtqk")]
 position = Vector2(496, -272)
-
-[node name="Floor2" parent="." instance=ExtResource("2_tg1kc")]
-position = Vector2(256, 0)
 
 [node name="MetalPlate" parent="." instance=ExtResource("4_t6r12")]
 position = Vector2(15, -12)

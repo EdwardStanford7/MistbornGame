@@ -3,9 +3,9 @@ extends CharacterBody2D
 signal enter_loading_zone
 
 @export var friction: float = 0.075
-@export var speed_force: float = 2000 # ikik DC can suck a fat one
+@export var move_force: float = 2000
 @export var jump_force: float = -30000
-@export var pull_push_force: float = 150000
+@export var pull_push_force: float = 175000
 @export var mass: float = 65
 @export var throw_force: float = 500
 
@@ -16,24 +16,24 @@ var selected_metal
 var tin_active: = false
 
 # Abilities unlocked section. Commented out ones are not implemented.
-var steel_unlocked = false
-var tin_unlocked = false
-#var zinc_unlocked = false
-#var brass_unlocked = false
-#var copper_unlocked = false
-#var bronze_unlocked = false
-#var cadmium_unlocked = false
-#var bendalloy_unlocked = false
-#var gold_unlocked = false
-#var electrum_unlocked = false
-#var chromium_unlocked = false
-#var nicrosil_unlocked = false
-#var aluminum_unlocked = false
-#var duralumin_unlocked = false
-#var atium_unlocked = false
+var steel_unlocked = true
+var tin_unlocked = true
+#var zinc_unlocked = true
+#var brass_unlocked = true
+#var copper_unlocked = true
+#var bronze_unlocked = true
+#var cadmium_unlocked = true
+#var bendalloy_unlocked = true
+#var gold_unlocked = true # probably cutting this ability, can't think of anything cool to do with it except maybe lore?
+#var electrum_unlocked = true
+#var chromium_unlocked = true
+#var nicrosil_unlocked = true
+#var aluminum_unlocked = true
+#var duralumin_unlocked = true
+#var atium_unlocked = true
 
 func _ready():
-	# Check if light needs to be active or not
+	# Check if tin light needs to be enabled or not
 	if get_tree().root.get_child(0).has_node("Darkness"):
 		self.get_child(3).enabled = true
 	else:
@@ -43,6 +43,7 @@ func _physics_process(_delta):
 	force_per_frame = Vector2(0, 0)
 	
 	# Allomantic actions
+	get_target_metal()
 	handle_iron_input() # Iron is starting ability, unlocked from beginning of game.
 	if steel_unlocked:
 		handle_steel_input()
@@ -94,7 +95,7 @@ func handle_move_input():
 	var direction = Input.get_axis("left", "right")
 	if is_on_floor() || is_on_wall() || is_on_ceiling():
 		if direction:
-			force_per_frame.x = direction * speed_force
+			force_per_frame.x = direction * move_force
 
 func handle_throw_coin_input():
 	if Input.is_action_just_pressed("throw_coin"):
@@ -106,43 +107,29 @@ func handle_throw_coin_input():
 
 # Allomancy section
 func handle_iron_input():
-	var target = get_target_metal()
-	if target:
-		selected_metal = target
-			
 	if !selected_metal:
 		return
 	
 	if Input.is_action_pressed("iron"):
 		force_per_frame += selected_metal.pull(position, mass, pull_push_force)
 		return
-		
-	selected_metal = null
 
 func handle_steel_input():
-	var target = get_target_metal()
-	if target:
-		selected_metal = target
-			
 	if !selected_metal:
 		return
 	
 	if Input.is_action_pressed("steel"):
 		force_per_frame += selected_metal.push(position, mass, pull_push_force)
 		return
-		
-	selected_metal = null
 
-func get_target_metal() -> Object:
+func get_target_metal():
 	var distance_away = INF
-	var return_node = null
 	
 	for object in get_tree().get_nodes_in_group("Metal"):
 		var distance = get_viewport().get_mouse_position().distance_to(object.get_global_transform_with_canvas().origin)
 		if distance < distance_away && distance < 75:
 			distance_away = distance
-			return_node = object;
-	return return_node
+			selected_metal = object;
 
 func handle_tin_input():
 	if Input.is_action_just_pressed("tin"):

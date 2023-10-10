@@ -14,6 +14,7 @@ continuous_cd = 2
 max_contacts_reported = 100
 contact_monitor = true
 can_sleep = false
+lock_rotation = true
 script = ExtResource("1_epvx3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
