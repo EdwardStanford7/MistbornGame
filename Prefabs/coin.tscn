@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://btewn1jtdw5rb"]
 
 [ext_resource type="Script" path="res://Scripts/coin.gd" id="1_epvx3"]
-[ext_resource type="Texture2D" uid="uid://m7br5rt558i6" path="res://Art/coin.png" id="2_2gq14"]
+[ext_resource type="Texture2D" uid="uid://bpxvvy7nstqns" path="res://Art/coin.png" id="2_2gq14"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_rydrl"]
 radius = 3.0
@@ -11,7 +11,7 @@ collision_layer = 4
 collision_mask = 7
 mass = 0.01
 continuous_cd = 2
-max_contacts_reported = 100
+max_contacts_reported = 10
 contact_monitor = true
 can_sleep = false
 lock_rotation = true

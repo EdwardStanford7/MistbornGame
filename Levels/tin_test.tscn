@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://jd44661cckq2" path="res://Prefabs/wall.tscn" id="3_iri82"]
 [ext_resource type="PackedScene" uid="uid://ca3cll143cteb" path="res://Prefabs/scene_transition.tscn" id="4_i1hjr"]
 
-[node name="basic_test_scene" type="Node2D"]
+[node name="Tin" type="Node2D"]
 
 [node name="Darkness" type="CanvasModulate" parent="."]
 color = Color(0, 0, 0, 1)
@@ -13,21 +13,18 @@ color = Color(0, 0, 0, 1)
 [node name="Background" type="ColorRect" parent="."]
 offset_left = -558.0
 offset_top = -608.0
-offset_right = 558.0
+offset_right = 995.0
 offset_bottom = 56.0
 color = Color(0.0745098, 0.286275, 0.388235, 1)
 
 [node name="Player" parent="." instance=ExtResource("1_uv8m4")]
-position = Vector2(143, -52)
-friction = null
-speed_force = null
-jump_force = null
-pull_push_force = null
-mass = null
-throw_force = null
+position = Vector2(140, -42)
 
 [node name="Floor" parent="." instance=ExtResource("2_ws37f")]
 position = Vector2(-256, 0)
+
+[node name="Floor2" parent="." instance=ExtResource("2_ws37f")]
+position = Vector2(256, 0)
 
 [node name="Floor3" parent="." instance=ExtResource("2_ws37f")]
 position = Vector2(-256, -544)
@@ -40,9 +37,6 @@ position = Vector2(-496, -272)
 
 [node name="Wall2" parent="." instance=ExtResource("3_iri82")]
 position = Vector2(496, -272)
-
-[node name="Floor2" parent="." instance=ExtResource("2_ws37f")]
-position = Vector2(256, 0)
 
 [node name="SceneTransition" parent="." instance=ExtResource("4_i1hjr")]
 position = Vector2(-350, -48)

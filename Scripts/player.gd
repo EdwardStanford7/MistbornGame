@@ -36,8 +36,6 @@ func _ready():
 	# Check if tin light needs to be enabled or not
 	if get_tree().root.get_child(0).has_node("Darkness"):
 		self.get_child(3).enabled = true
-	else:
-		self.get_child(3).enabled = false
 
 func _physics_process(_delta):
 	force_per_frame = Vector2(0, 0)

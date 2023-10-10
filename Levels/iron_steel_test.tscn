@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://soiho4lbqcva" path="res://Prefabs/metal_plate.tscn" id="4_t6r12"]
 [ext_resource type="PackedScene" uid="uid://ca3cll143cteb" path="res://Prefabs/scene_transition.tscn" id="5_swe1n"]
 
-[node name="TestLevel" type="Node2D"]
+[node name="IronSteel" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_m34t3")]
 position = Vector2(58, -103)
