@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cvrlem2381ta7"
-path="res://.godot/imported/tin_light.png-a5bfb3839aca2c30aabf415b4cff8939.ctex"
+uid="uid://m7br5rt558i6"
+path="res://.godot/imported/coin.png-ee9acd1b8122cbeb6e3e3dc822b61139.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/tin_light.png"
-dest_files=["res://.godot/imported/tin_light.png-a5bfb3839aca2c30aabf415b4cff8939.ctex"]
+source_file="res://Art/coin.png"
+dest_files=["res://.godot/imported/coin.png-ee9acd1b8122cbeb6e3e3dc822b61139.ctex"]
 
 [params]
 

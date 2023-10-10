@@ -8,7 +8,7 @@ size = Vector2(32, 8)
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_0v4bn"]
 size = Vector2(32, 8)
 
-[node name="StaticBody2D2" type="StaticBody2D" groups=["Metal"]]
+[node name="MetalPlate" type="StaticBody2D" groups=["Metal"]]
 script = ExtResource("1_us400")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

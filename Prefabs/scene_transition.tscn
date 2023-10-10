@@ -19,7 +19,6 @@ modulate = Color(1, 0, 0, 1)
 texture = SubResource("PlaceholderTexture2D_hg2l5")
 
 [node name="Label" type="Label" parent="."]
-light_mask = 2
 offset_left = -32.0
 offset_top = -64.0
 offset_right = 32.0
