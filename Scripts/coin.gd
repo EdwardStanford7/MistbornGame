@@ -10,6 +10,5 @@ func push(player_position: Vector2, _player_mass: float, push_strength: float) -
 	return push_strength * (player_position - position).normalized() / (position - player_position).length()
 
 func on_body_entered(other):
-	print(other)
 	if other is CharacterBody2D:
 		self.queue_free()
