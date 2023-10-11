@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://diam6i01aiof1"]
+[gd_scene load_steps=6 format=3 uid="uid://diam6i01aiof1"]
 
 [ext_resource type="PackedScene" uid="uid://bhj6vcmatg6vi" path="res://Characters/player.tscn" id="1_uv8m4"]
 [ext_resource type="PackedScene" uid="uid://4ky7npwoorln" path="res://Prefabs/floor.tscn" id="2_ws37f"]
 [ext_resource type="PackedScene" uid="uid://jd44661cckq2" path="res://Prefabs/wall.tscn" id="3_iri82"]
 [ext_resource type="PackedScene" uid="uid://ca3cll143cteb" path="res://Prefabs/scene_transition.tscn" id="4_i1hjr"]
+[ext_resource type="PackedScene" uid="uid://dqn4ebc3yyya5" path="res://Characters/stunner_enemy.tscn" id="5_6gmcr"]
 
 [node name="Tin" type="Node2D"]
 
@@ -13,7 +14,7 @@ color = Color(0, 0, 0, 1)
 [node name="Background" type="ColorRect" parent="."]
 offset_left = -558.0
 offset_top = -608.0
-offset_right = 995.0
+offset_right = 574.0
 offset_bottom = 56.0
 color = Color(0.0745098, 0.286275, 0.388235, 1)
 
@@ -42,3 +43,9 @@ position = Vector2(496, -272)
 position = Vector2(-350, -48)
 scene_to_load = "res://Levels/main.tscn"
 label = "Back To Main"
+
+[node name="Floor5" parent="." instance=ExtResource("2_ws37f")]
+position = Vector2(208, -153)
+
+[node name="StunnerEnemy" parent="." instance=ExtResource("5_6gmcr")]
+position = Vector2(291, -196)

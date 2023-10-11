@@ -6,47 +6,71 @@ signal steel_released
 signal zinc_released
 signal brass_released
 
-@export var friction: float = 0.075
-@export var move_force: float = 2000
-@export var jump_force: float = -30000
-@export var pull_push_force: float = 175000
-@export var mass: float = 65
-@export var throw_force: float = 500
+# Progression Abilites
+static var steel_unlocked = false
+static var tin_unlocked = false
+static var pewter_unlocked = false
+static var zinc_unlocked = false
+static var brass_unlocked = false
+static var copper_unlocked = false
+static var bronze_unlocked = false
+static var cadmium_unlocked = false
+static var bendalloy_unlocked = false
+static var gold_unlocked = false
+static var electrum_unlocked = false
+static var chromium_unlocked = false
+static var nicrosil_unlocked = false
+static var aluminum_unlocked = false
+static var duralumin_unlocked = false
+static var atium_unlocked = false
 
-# Get the gravity from the project settings to be synced with RigidBody nodes.
+# Parameters
+@export var friction = 0.075
+@export var move_force = 2000
+@export var jump_force = -28000
+@export var pull_push_force = 175000
+@export var mass = 65
+@export var throw_force = 400
+@export var health = 100
+
+# Instance variables
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var force_per_frame: Vector2
 var selected_metal
 var tin_active: = false
-
-# Abilities unlocked section. Commented out ones are not implemented.
-var steel_unlocked = true
-var tin_unlocked = true
-var zinc_unlocked = true
-var brass_unlocked = true
-#var copper_unlocked = true
-#var bronze_unlocked = true
-#var cadmium_unlocked = true
-#var bendalloy_unlocked = true
-#var gold_unlocked = true # probably cutting this ability, can't think of anything cool to do with it except maybe lore?
-#var electrum_unlocked = true
-#var chromium_unlocked = true
-#var nicrosil_unlocked = true
-#var aluminum_unlocked = true
-#var duralumin_unlocked = true
-#var atium_unlocked = true
+var has_jump = false
+var is_stunned = false
+var stun_timer = 0
 
 func _ready():
 	# Check if tin light needs to be enabled or not
 	if get_tree().root.get_child(0).has_node("Darkness"):
 		$PointLight2D.enabled = true
+		
+	for enemy in get_tree().get_nodes_in_group("Stunner"):
+		print(enemy)
+		enemy.stun_player.connect(get_stunned)
 
 func _physics_process(_delta):
 	force_per_frame = Vector2(0, 0)
 	
+	if is_stunned:
+		print(stun_timer)
+		stun_timer -= 1
+		handle_gravity()
+		handle_friction()
+		velocity += force_per_frame / mass # Might need to do something to limit horizontal velocity specifically
+		move_and_slide()
+		
+		if stun_timer <= 0:
+			is_stunned = false
+			
+		return
+	
 	# Allomantic actions
-	if !selected_metal:
-		selected_metal = get_target_from_group("Metal")
+	var current_target = get_target_from_group("Metal")
+	if current_target:
+		selected_metal = current_target
 	handle_iron_input() # Iron is starting ability, unlocked from beginning of game.
 	if steel_unlocked:
 		handle_steel_input()
@@ -56,6 +80,9 @@ func _physics_process(_delta):
 		handle_zinc_input()
 	if brass_unlocked:
 		handle_brass_input()
+		
+	if is_on_floor():
+		has_jump = true;
 	
 	# Other actions
 	handle_loading_zone_input()
@@ -66,7 +93,7 @@ func _physics_process(_delta):
 	# Finalize physics
 	handle_gravity()
 	handle_friction()
-	velocity += force_per_frame / mass
+	velocity += force_per_frame / mass # Might need to do something to limit horizontal velocity specifically
 	move_and_slide()
 
 # Basic player functionality section
@@ -95,8 +122,12 @@ func handle_gravity():
 
 func handle_jump_input():
 	if Input.is_action_just_pressed("jump"):
-		if is_on_floor() || is_on_wall():
-			force_per_frame.y += jump_force
+		if has_jump:
+			if pewter_unlocked:
+				force_per_frame.y += (jump_force * 1.2)
+			else:
+				force_per_frame.y += jump_force
+			has_jump = false
 
 func handle_move_input():
 	var direction = Input.get_axis("left", "right")
@@ -113,8 +144,18 @@ func handle_throw_coin_input():
 		steel_released.connect(coin.allomancy_released)
 		
 		get_tree().root.get_child(0).add_child(coin)
-		coin.position = self.position + (direction * 48) # Math here to make spawning location work. Can't spawn inside floors or walls but need 360 degree for in air
+		coin.position = self.position + (direction * 34) # Math here to make spawning location work. Can't spawn inside floors or walls but need 360 degree for in air
 		coin.apply_force(direction * throw_force)
+
+func get_stunned():
+	enter_loading_zone.emit() # This is soooooo bad but it might be the best way to do it
+	iron_released.emit()
+	steel_released.emit()
+	zinc_released.emit()
+	brass_released.emit()
+
+	is_stunned = true
+	stun_timer = 60
 
 # Allomancy section
 func handle_iron_input():

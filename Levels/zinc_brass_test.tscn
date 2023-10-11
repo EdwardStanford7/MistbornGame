@@ -12,7 +12,7 @@
 position = Vector2(143, -52)
 
 [node name="TestEnemy" parent="." instance=ExtResource("5_gau1v")]
-position = Vector2(-216, -149)
+position = Vector2(-130, -149)
 
 [node name="TestEnemy2" parent="." instance=ExtResource("5_gau1v")]
 position = Vector2(306, -249)
@@ -44,7 +44,7 @@ scene_to_load = "res://Levels/main.tscn"
 label = "Back To Main"
 
 [node name="Floor5" parent="." instance=ExtResource("2_627f4")]
-position = Vector2(-147, -103)
+position = Vector2(-18, -103)
 
 [node name="Floor6" parent="." instance=ExtResource("2_627f4")]
 position = Vector2(206, -198)

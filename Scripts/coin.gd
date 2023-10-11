@@ -19,7 +19,7 @@ func pull(player_position: Vector2, player_mass: float, pull_strength: float) ->
 	
 	var used_force
 	if being_moved:
-		used_force = (position - previous_position) * mass / 60
+		used_force = (position - previous_position) * mass
 		previous_position = position
 	else:
 		used_force = self_force
@@ -33,8 +33,6 @@ func pull(player_position: Vector2, player_mass: float, pull_strength: float) ->
 	return player_force
 
 func push(player_position: Vector2, player_mass: float, push_strength: float) -> Vector2:
-	being_moved = true
-	
 	var self_percentage = player_mass / (mass + player_mass)
 	var player_percentage = mass / (mass + player_mass)
 	
@@ -46,7 +44,7 @@ func push(player_position: Vector2, player_mass: float, push_strength: float) ->
 	
 	var used_force
 	if being_moved:
-		used_force = (position - previous_position) * mass / 60
+		used_force = (position - previous_position) * mass
 		previous_position = position
 	else:
 		used_force = self_force

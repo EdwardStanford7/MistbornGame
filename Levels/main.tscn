@@ -1,14 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://x0qufevddtpt"]
+[gd_scene load_steps=6 format=3 uid="uid://x0qufevddtpt"]
 
 [ext_resource type="PackedScene" uid="uid://4ky7npwoorln" path="res://Prefabs/floor.tscn" id="1_8mn4l"]
+[ext_resource type="Script" path="res://Scripts/main.gd" id="1_fxvqu"]
 [ext_resource type="PackedScene" uid="uid://jd44661cckq2" path="res://Prefabs/wall.tscn" id="2_61wn7"]
 [ext_resource type="PackedScene" uid="uid://bhj6vcmatg6vi" path="res://Characters/player.tscn" id="3_ugfnl"]
 [ext_resource type="PackedScene" uid="uid://ca3cll143cteb" path="res://Prefabs/scene_transition.tscn" id="4_x1iks"]
 
 [node name="Main" type="Node2D"]
+script = ExtResource("1_fxvqu")
 
 [node name="Player" parent="." instance=ExtResource("3_ugfnl")]
-position = Vector2(-47, -58)
+position = Vector2(-39, -42)
 
 [node name="Floor" parent="." instance=ExtResource("1_8mn4l")]
 position = Vector2(512, 0)
