@@ -1,5 +1,7 @@
 extends RigidBody2D
 
+var being_moved = false
+var move_updates = 0
 var previous_position = Vector2.ZERO
 
 func _ready():
@@ -15,8 +17,15 @@ func pull(player_position: Vector2, player_mass: float, pull_strength: float) ->
 	
 	var self_force = self_percentage * pull_strength * -direction / distance_decay
 	
-	var used_force = (position - previous_position) * mass / 60
-	previous_position = position
+	var used_force
+	if being_moved:
+		used_force = (position - previous_position) * mass / 60
+		previous_position = position
+	else:
+		used_force = self_force
+		move_updates += 1
+		if move_updates > 5:
+			being_moved = true
 	
 	var player_force = player_percentage * pull_strength * direction / distance_decay - (self_force - used_force)
 	
@@ -24,6 +33,8 @@ func pull(player_position: Vector2, player_mass: float, pull_strength: float) ->
 	return player_force
 
 func push(player_position: Vector2, player_mass: float, push_strength: float) -> Vector2:
+	being_moved = true
+	
 	var self_percentage = player_mass / (mass + player_mass)
 	var player_percentage = mass / (mass + player_mass)
 	
@@ -33,8 +44,15 @@ func push(player_position: Vector2, player_mass: float, push_strength: float) ->
 	
 	var self_force = self_percentage * push_strength * direction / distance_decay
 	
-	var used_force = (position - previous_position) * mass / 60
-	previous_position = position
+	var used_force
+	if being_moved:
+		used_force = (position - previous_position) * mass / 60
+		previous_position = position
+	else:
+		used_force = self_force
+		move_updates += 1
+		if move_updates > 5:
+			being_moved = true
 	
 	var player_force = player_percentage * push_strength * -direction / distance_decay - (self_force - used_force)
 
@@ -44,3 +62,7 @@ func push(player_position: Vector2, player_mass: float, push_strength: float) ->
 func on_body_entered(other):
 	if other is CharacterBody2D:
 		self.queue_free()
+		
+func allomancy_released():
+	being_moved = false
+	move_updates = 0

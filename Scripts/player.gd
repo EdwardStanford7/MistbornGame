@@ -45,7 +45,8 @@ func _physics_process(_delta):
 	force_per_frame = Vector2(0, 0)
 	
 	# Allomantic actions
-	selected_metal = get_target_from_group("Metal")
+	if !selected_metal:
+		selected_metal = get_target_from_group("Metal")
 	handle_iron_input() # Iron is starting ability, unlocked from beginning of game.
 	if steel_unlocked:
 		handle_steel_input()
@@ -107,6 +108,10 @@ func handle_throw_coin_input():
 	if Input.is_action_just_pressed("throw_coin"):
 		var direction = (get_viewport().get_mouse_position() - self.get_global_transform_with_canvas().origin).normalized()
 		var coin = preload("res://Prefabs/coin.tscn").instantiate()
+		
+		iron_released.connect(coin.allomancy_released)
+		steel_released.connect(coin.allomancy_released)
+		
 		get_tree().root.get_child(0).add_child(coin)
 		coin.position = self.position + (direction * 48) # Math here to make spawning location work. Can't spawn inside floors or walls but need 360 degree for in air
 		coin.apply_force(direction * throw_force)
@@ -118,7 +123,9 @@ func handle_iron_input():
 	
 	if Input.is_action_pressed("iron"):
 		force_per_frame += selected_metal.pull(position, mass, pull_push_force)
-		return
+	if Input.is_action_just_released("iron"):
+		iron_released.emit()
+		selected_metal = null
 
 func handle_steel_input():
 	if !selected_metal:
@@ -126,7 +133,9 @@ func handle_steel_input():
 	
 	if Input.is_action_pressed("steel"):
 		force_per_frame += selected_metal.push(position, mass, pull_push_force)
-		return
+	if Input.is_action_just_released("steel"):
+		steel_released.emit()
+		selected_metal = null
 
 func handle_tin_input():
 	if Input.is_action_just_pressed("tin"):
