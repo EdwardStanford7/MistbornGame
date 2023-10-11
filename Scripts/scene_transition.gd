@@ -6,7 +6,7 @@ extends Area2D
 var player = null
 
 func _ready():
-	self.get_child(2).set_text(label)
+	$Label.set_text(label)
 	self.body_entered.connect(_on_body_entered)
 	self.body_exited.connect(_on_body_exited)
 

@@ -1,6 +1,10 @@
 extends CharacterBody2D
 
 signal enter_loading_zone
+signal iron_released
+signal steel_released
+signal zinc_released
+signal brass_released
 
 @export var friction: float = 0.075
 @export var move_force: float = 2000
@@ -18,8 +22,8 @@ var tin_active: = false
 # Abilities unlocked section. Commented out ones are not implemented.
 var steel_unlocked = true
 var tin_unlocked = true
-#var zinc_unlocked = true
-#var brass_unlocked = true
+var zinc_unlocked = true
+var brass_unlocked = true
 #var copper_unlocked = true
 #var bronze_unlocked = true
 #var cadmium_unlocked = true
@@ -35,18 +39,22 @@ var tin_unlocked = true
 func _ready():
 	# Check if tin light needs to be enabled or not
 	if get_tree().root.get_child(0).has_node("Darkness"):
-		self.get_child(3).enabled = true
+		$PointLight2D.enabled = true
 
 func _physics_process(_delta):
 	force_per_frame = Vector2(0, 0)
 	
 	# Allomantic actions
-	get_target_metal()
+	selected_metal = get_target_from_group("Metal")
 	handle_iron_input() # Iron is starting ability, unlocked from beginning of game.
 	if steel_unlocked:
 		handle_steel_input()
 	if tin_unlocked:
 		handle_tin_input()
+	if zinc_unlocked:
+		handle_zinc_input()
+	if brass_unlocked:
+		handle_brass_input()
 	
 	# Other actions
 	handle_loading_zone_input()
@@ -120,22 +128,42 @@ func handle_steel_input():
 		force_per_frame += selected_metal.push(position, mass, pull_push_force)
 		return
 
-func get_target_metal():
-	var distance_away = INF
-	
-	for object in get_tree().get_nodes_in_group("Metal"):
-		var distance = get_viewport().get_mouse_position().distance_to(object.get_global_transform_with_canvas().origin)
-		if distance < distance_away && distance < 75:
-			distance_away = distance
-			selected_metal = object;
-
 func handle_tin_input():
 	if Input.is_action_just_pressed("tin"):
 		if tin_active:
-			self.get_child(3).set_texture(preload("res://Art/basic_light.png"))
+			$PointLight2D.set_texture(preload("res://Art/basic_light.png"))
 			tin_active = false
 		else:
-			self.get_child(3).set_texture(preload("res://Art/tin_light.png"))
+			$PointLight2D.set_texture(preload("res://Art/tin_light.png"))
 			tin_active = true
 
-# pewter is passive upgrade, rest of activated abilites to follow.
+func handle_zinc_input():
+	if Input.is_action_just_pressed("zinc"):
+		var enemy = get_target_from_group("Enemy")
+		if enemy:
+			enemy.change_AI_mode(enemy.AI_mode.aggressive)
+			zinc_released.connect(enemy.reset_AI)
+	elif Input.is_action_just_released("zinc"):
+		zinc_released.emit()
+
+func handle_brass_input():
+	if Input.is_action_just_pressed("brass"):
+		var enemy = get_target_from_group("Enemy")
+		if enemy:
+			enemy.change_AI_mode(enemy.AI_mode.passive)
+			brass_released.connect(enemy.reset_AI)
+	elif Input.is_action_just_released("brass"):
+		brass_released.emit()
+
+# Helpers
+func get_target_from_group(group: String) -> Object:
+	var distance_away = INF
+	var selected_node = null
+	
+	for object in get_tree().get_nodes_in_group(group):
+		var distance = get_viewport().get_mouse_position().distance_to(object.get_global_transform_with_canvas().origin)
+		if distance < distance_away && distance < 75:
+			distance_away = distance
+			selected_node = object;
+	
+	return selected_node

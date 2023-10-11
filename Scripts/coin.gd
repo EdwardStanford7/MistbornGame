@@ -20,10 +20,6 @@ func pull(player_position: Vector2, player_mass: float, pull_strength: float) ->
 	
 	var player_force = player_percentage * pull_strength * direction / distance_decay - (self_force - used_force)
 	
-	print(self_force)
-	print(used_force)
-	print(player_force)
-	
 	self.apply_force(self_force)
 	return player_force
 
