@@ -25,22 +25,27 @@ static var duralumin_unlocked = false
 static var atium_unlocked = false
 
 # Parameters
-@export var friction = 0.075
-@export var move_force = 2000
-@export var jump_force = -28000
-@export var pull_push_force = 175000
-@export var mass = 65
-@export var throw_force = 400
-@export var health = 100
+@export var friction: float
+@export var move_force: int
+@export var jump_force: int
+@export var pull_push_force: int
+@export var mass: int
+@export var throw_force: int
+@export var health: int
+## This value is in physics update frames (1/60 second)
+@export var stun_time: int
+## This value is in physics update frames (1/60 second)
+@export var coyote_time: int
 
 # Instance variables
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var force_per_frame: Vector2
 var selected_metal
 var tin_active: = false
-var has_jump = false
 var is_stunned = false
 var stun_timer = 0
+var has_jump = false
+var coyote_timer = 0
 
 func _ready():
 	# Check if tin light needs to be enabled or not
@@ -48,14 +53,21 @@ func _ready():
 		$PointLight2D.enabled = true
 		
 	for enemy in get_tree().get_nodes_in_group("Stunner"):
-		print(enemy)
 		enemy.stun_player.connect(get_stunned)
 
 func _physics_process(_delta):
 	force_per_frame = Vector2(0, 0)
 	
+	if is_grounded():
+		has_jump = true
+		coyote_timer = coyote_time
+	
+	if !(is_on_floor() || is_on_wall() || is_on_ceiling()) && coyote_timer > 0:
+		coyote_timer -= 1
+		if coyote_timer == 0:
+			has_jump = false
+	
 	if is_stunned:
-		print(stun_timer)
 		stun_timer -= 1
 		handle_gravity()
 		handle_friction()
@@ -80,9 +92,6 @@ func _physics_process(_delta):
 		handle_zinc_input()
 	if brass_unlocked:
 		handle_brass_input()
-		
-	if is_on_floor():
-		has_jump = true;
 	
 	# Other actions
 	handle_loading_zone_input()
@@ -124,14 +133,14 @@ func handle_jump_input():
 	if Input.is_action_just_pressed("jump"):
 		if has_jump:
 			if pewter_unlocked:
-				force_per_frame.y += (jump_force * 1.2)
+				force_per_frame.y -= (jump_force * 1.2)
 			else:
-				force_per_frame.y += jump_force
+				force_per_frame.y -= jump_force
 			has_jump = false
 
 func handle_move_input():
 	var direction = Input.get_axis("left", "right")
-	if is_on_floor() || is_on_wall() || is_on_ceiling():
+	if has_jump:
 		if direction:
 			force_per_frame.x = direction * move_force
 
@@ -146,16 +155,6 @@ func handle_throw_coin_input():
 		get_tree().root.get_child(0).add_child(coin)
 		coin.position = self.position + (direction * 34) # Math here to make spawning location work. Can't spawn inside floors or walls but need 360 degree for in air
 		coin.apply_force(direction * throw_force)
-
-func get_stunned():
-	enter_loading_zone.emit() # This is soooooo bad but it might be the best way to do it
-	iron_released.emit()
-	steel_released.emit()
-	zinc_released.emit()
-	brass_released.emit()
-
-	is_stunned = true
-	stun_timer = 60
 
 # Allomancy section
 func handle_iron_input():
@@ -217,3 +216,16 @@ func get_target_from_group(group: String) -> Object:
 			selected_node = object;
 	
 	return selected_node
+
+func is_grounded():
+	return abs(velocity.y) < 0.1
+
+func get_stunned():
+	enter_loading_zone.emit() # This is soooooo bad but it might be the best way to do it
+	iron_released.emit()
+	steel_released.emit()
+	zinc_released.emit()
+	brass_released.emit()
+
+	is_stunned = true
+	stun_timer = stun_time

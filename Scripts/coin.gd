@@ -58,7 +58,7 @@ func push(player_position: Vector2, player_mass: float, push_strength: float) ->
 	return player_force
 
 func on_body_entered(other):
-	if other is CharacterBody2D:
+	if other.is_in_group("Player"):
 		self.queue_free()
 		
 func allomancy_released():

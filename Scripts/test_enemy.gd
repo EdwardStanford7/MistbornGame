@@ -1,6 +1,6 @@
 extends RigidBody2D
 
-@export var move_force: float = 2000
+@export var move_force: float
 
 enum AI_mode{
 	passive,

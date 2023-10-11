@@ -2,7 +2,7 @@ extends RigidBody2D
 
 signal stun_player
 
-@export var move_force: float = 2000
+@export var move_force: float
 
 enum AI_mode{
 	passive,
