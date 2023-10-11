@@ -29,7 +29,7 @@ func pull(player_position: Vector2, player_mass: float, pull_strength: float) ->
 	
 	var player_force = player_percentage * pull_strength * direction / distance_decay - (self_force - used_force)
 	
-	self.apply_force(self_force)
+	self.apply_force(self_force / 10)
 	return player_force
 
 func push(player_position: Vector2, player_mass: float, push_strength: float) -> Vector2:
@@ -54,7 +54,7 @@ func push(player_position: Vector2, player_mass: float, push_strength: float) ->
 	
 	var player_force = player_percentage * push_strength * -direction / distance_decay - (self_force - used_force)
 
-	self.apply_force(self_force)
+	self.apply_force(self_force / 10)
 	return player_force
 
 func on_body_entered(other):

@@ -4,7 +4,7 @@ extends Node2D
 func _ready():
 	$Player.steel_unlocked = true
 	$Player.tin_unlocked = true
-	$Player.pewter_unlocked = true
+	$Player.pewter_unlocked = false
 	$Player.zinc_unlocked = true
 	$Player.brass_unlocked = true
 	$Player.copper_unlocked = true
