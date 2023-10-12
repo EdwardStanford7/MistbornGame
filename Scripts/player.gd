@@ -221,6 +221,9 @@ func is_grounded():
 	return abs(velocity.y) < 0.1
 
 func get_stunned():
+	if !tin_active:
+		return
+	
 	enter_loading_zone.emit() # This is soooooo bad but it might be the best way to do it
 	iron_released.emit()
 	steel_released.emit()
