@@ -1,66 +1,43 @@
 extends RigidBody2D
 
-var being_moved = false
-var move_updates = 0
-var previous_position = Vector2.ZERO
+var net_force : Vector2 = Vector2.ZERO
+var previous_linear_velocity : Vector2 = Vector2.ZERO
+var being_affected = false
 
 func _ready():
 	self.body_entered.connect(on_body_entered)
 
-func pull(player_position: Vector2, player_mass: float, pull_strength: float) -> Vector2:
-	var self_percentage = player_mass / (mass + player_mass)
-	var player_percentage = mass / (mass + player_mass)
+func _integrate_forces(state):
+	net_force = Vector2.ZERO
 	
-	var distance_vector = position - player_position
-	var direction = distance_vector.normalized()
-	var distance_decay = distance_vector.length()
+	if state.get_contact_count() > 0:
+		var dv : Vector2 = state.linear_velocity - previous_linear_velocity
+		net_force = mass * dv #/ state.step
 	
-	var self_force = self_percentage * pull_strength * -direction / distance_decay
-	
-	var used_force
-	if being_moved:
-		used_force = (position - previous_position) * mass
-		previous_position = position
-	else:
-		used_force = self_force
-		move_updates += 1
-		if move_updates > 5:
-			being_moved = true
-	
-	var player_force = player_percentage * pull_strength * direction / distance_decay - (self_force - used_force)
-	
-	self.apply_force(self_force / 10)
-	return player_force
+	previous_linear_velocity = state.linear_velocity
 
-func push(player_position: Vector2, player_mass: float, push_strength: float) -> Vector2:
-	var self_percentage = player_mass / (mass + player_mass)
-	var player_percentage = mass / (mass + player_mass)
+func pull(player_position: Vector2, pull_strength: float) -> Vector2:
+	var direction = player_position.direction_to(position)
+	var force = pull_strength * direction / (position - player_position).length()
 	
-	var distance_vector = position - player_position
-	var direction = distance_vector.normalized()
-	var distance_decay = distance_vector.length()
+	if being_affected:
+		force += force.project(force - net_force)
+	being_affected = true
 	
-	var self_force = self_percentage * push_strength * direction / distance_decay
-	
-	var used_force
-	if being_moved:
-		used_force = (position - previous_position) * mass
-		previous_position = position
-	else:
-		used_force = self_force
-		move_updates += 1
-		if move_updates > 5:
-			being_moved = true
-	
-	var player_force = player_percentage * push_strength * -direction / distance_decay - (self_force - used_force)
+	self.apply_force(-force)
+	return force
 
-	self.apply_force(self_force / 10)
-	return player_force
+func push(player_position: Vector2, push_strength: float) -> Vector2:
+	var direction = position.direction_to(player_position)
+	var force = push_strength * direction / (position - player_position).length()
+	
+	if being_affected:
+		force += force.project(force - net_force)
+	being_affected = true
+	
+	self.apply_force(-force)
+	return force
 
 func on_body_entered(other):
 	if other.is_in_group("Player"):
 		self.queue_free()
-		
-func allomancy_released():
-	being_moved = false
-	move_updates = 0

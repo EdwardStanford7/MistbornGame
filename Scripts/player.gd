@@ -1,8 +1,6 @@
 extends CharacterBody2D
 
 signal enter_loading_zone
-signal iron_released
-signal steel_released
 signal zinc_released
 signal brass_released
 
@@ -58,25 +56,10 @@ func _ready():
 func _physics_process(_delta):
 	force_per_frame = Vector2(0, 0)
 	
-	if is_grounded():
-		has_jump = true
-		coyote_timer = coyote_time
-	
-	if !(is_on_floor() || is_on_wall() || is_on_ceiling()) && coyote_timer > 0:
-		coyote_timer -= 1
-		if coyote_timer == 0:
-			has_jump = false
+	coyote_update()
 	
 	if is_stunned:
-		stun_timer -= 1
-		handle_gravity()
-		handle_friction()
-		velocity += force_per_frame / mass # Might need to do something to limit horizontal velocity specifically
-		move_and_slide()
-		
-		if stun_timer <= 0:
-			is_stunned = false
-			
+		stun_update()
 		return
 	
 	# Allomantic actions
@@ -100,10 +83,7 @@ func _physics_process(_delta):
 	handle_move_input()
 	
 	# Finalize physics
-	handle_gravity()
-	handle_friction()
-	velocity += force_per_frame / mass # Might need to do something to limit horizontal velocity specifically
-	move_and_slide()
+	compute_physics()
 
 # Basic player functionality section
 func handle_loading_zone_input():
@@ -111,20 +91,13 @@ func handle_loading_zone_input():
 		enter_loading_zone.emit()
 
 func handle_friction():
-	if is_on_floor() && force_per_frame.y > 0:
-		force_per_frame.x -= friction * force_per_frame.y * velocity.x / 10
+	if is_on_floor() || is_on_ceiling():# && force_per_frame.y > 0:
+		velocity.x *= friction
 		return
-	if is_on_ceiling() && force_per_frame.y < 0:
-		force_per_frame.x -= friction * abs(force_per_frame.y) * velocity.x / 10
-		return
-		
+	
 	if is_on_wall():
-		if force_per_frame.x < 0:
-			force_per_frame.y -= friction * abs(force_per_frame.x) * velocity.y / 10
-			return
-		if force_per_frame.x > 0:
-			force_per_frame.y -= friction * force_per_frame.x * velocity.y / 10
-			return
+		velocity.y *= friction
+		return
 
 func handle_gravity():
 	force_per_frame.y += gravity
@@ -149,11 +122,8 @@ func handle_throw_coin_input():
 		var direction = (get_viewport().get_mouse_position() - self.get_global_transform_with_canvas().origin).normalized()
 		var coin = preload("res://Prefabs/coin.tscn").instantiate()
 		
-		iron_released.connect(coin.allomancy_released)
-		steel_released.connect(coin.allomancy_released)
-		
 		get_tree().root.get_child(0).add_child(coin)
-		coin.position = self.position + (direction * 34) # Math here to make spawning location work. Can't spawn inside floors or walls but need 360 degree for in air
+		coin.position = self.position + (direction * 35) # Math here to make spawning location work. Can't spawn inside floors or walls but need 360 degree for in air
 		coin.apply_force(direction * throw_force)
 
 # Allomancy section
@@ -162,9 +132,8 @@ func handle_iron_input():
 		return
 	
 	if Input.is_action_pressed("iron"):
-		force_per_frame += selected_metal.pull(position, mass, pull_push_force)
+		force_per_frame += selected_metal.pull(position, pull_push_force)
 	if Input.is_action_just_released("iron"):
-		iron_released.emit()
 		selected_metal = null
 
 func handle_steel_input():
@@ -172,9 +141,8 @@ func handle_steel_input():
 		return
 	
 	if Input.is_action_pressed("steel"):
-		force_per_frame += selected_metal.push(position, mass, pull_push_force)
+		force_per_frame += selected_metal.push(position, pull_push_force)
 	if Input.is_action_just_released("steel"):
-		steel_released.emit()
 		selected_metal = null
 
 func handle_tin_input():
@@ -205,6 +173,12 @@ func handle_brass_input():
 		brass_released.emit()
 
 # Helpers
+func compute_physics():
+	handle_gravity()
+	velocity += force_per_frame / mass
+	handle_friction()
+	move_and_slide()
+
 func get_target_from_group(group: String) -> Object:
 	var distance_away = INF
 	var selected_node = null
@@ -224,11 +198,24 @@ func get_stunned():
 	if !tin_active:
 		return
 	
-	enter_loading_zone.emit() # This is soooooo bad but it might be the best way to do it
-	iron_released.emit()
-	steel_released.emit()
 	zinc_released.emit()
 	brass_released.emit()
-
+	
 	is_stunned = true
 	stun_timer = stun_time
+
+func stun_update():
+	stun_timer -= 1
+	compute_physics()
+	if stun_timer <= 0:
+		is_stunned = false
+
+func coyote_update():
+	if is_grounded():
+		has_jump = true
+		coyote_timer = coyote_time
+	
+	if !(is_on_floor() || is_on_wall() || is_on_ceiling()) && coyote_timer > 0:
+		coyote_timer -= 1
+		if coyote_timer == 0:
+			has_jump = false
