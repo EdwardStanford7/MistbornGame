@@ -10,6 +10,7 @@ size = Vector2(32, 8)
 
 [node name="MetalPlate" type="StaticBody2D" groups=["Metal"]]
 script = ExtResource("1_us400")
+mass = 250.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_p2fnx")

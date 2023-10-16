@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 signal enter_loading_zone
+signal metal_allomancy_released
 signal zinc_released
 signal brass_released
 
@@ -132,18 +133,24 @@ func handle_iron_input():
 		return
 	
 	if Input.is_action_pressed("iron"):
-		force_per_frame += selected_metal.pull(position, pull_push_force)
+		if selected_metal.is_in_group("Coin"):
+			selected_metal.connect_player(self)
+		force_per_frame += selected_metal.pull(position, pull_push_force, mass)
 	if Input.is_action_just_released("iron"):
 		selected_metal = null
+		metal_allomancy_released.emit()
 
 func handle_steel_input():
 	if !selected_metal:
 		return
 	
 	if Input.is_action_pressed("steel"):
-		force_per_frame += selected_metal.push(position, pull_push_force)
+		if selected_metal.is_in_group("Coin"):
+			selected_metal.connect_player(self)
+		force_per_frame += selected_metal.push(position, pull_push_force, mass)
 	if Input.is_action_just_released("steel"):
 		selected_metal = null
+		metal_allomancy_released.emit()
 
 func handle_tin_input():
 	if Input.is_action_just_pressed("tin"):
