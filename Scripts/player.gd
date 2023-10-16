@@ -55,8 +55,6 @@ func _ready():
 		enemy.stun_player.connect(get_stunned)
 
 func _physics_process(_delta):
-	force_per_frame = Vector2(0, 0)
-	
 	coyote_update()
 	
 	if is_stunned:
@@ -185,6 +183,10 @@ func compute_physics():
 	velocity += force_per_frame / mass
 	handle_friction()
 	move_and_slide()
+	force_per_frame = Vector2(0, 0)
+
+func apply_force(force: Vector2):
+	force_per_frame += force
 
 func get_target_from_group(group: String) -> Object:
 	var distance_away = INF
