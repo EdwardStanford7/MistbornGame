@@ -24,12 +24,17 @@ static var duralumin_unlocked = false
 static var atium_unlocked = false
 
 # Parameters
-@export var friction: float
-@export var move_force: int
-@export var jump_force: int
+@export var friction_coefficient: float
+## meters per second
+@export var movement_speed: int
+## meters per second
+@export var jump_speed: int
+## newtons ig doesn't really matter for this one
 @export var pull_push_force: int
+## kilograms
 @export var mass: int
-@export var throw_force: int
+## newtons again prolly
+@export var throw_speed: int
 @export var health: int
 ## This value is in physics update frames (1/60 second)
 @export var stun_time: int
@@ -58,7 +63,7 @@ func _physics_process(_delta):
 	coyote_update()
 	
 	if is_stunned:
-		stun_update()
+		stun_update(_delta)
 		return
 	
 	# Allomantic actions
@@ -77,12 +82,12 @@ func _physics_process(_delta):
 	
 	# Other actions
 	handle_loading_zone_input()
-	handle_throw_coin_input()
-	handle_jump_input()
-	handle_move_input()
+	handle_throw_coin_input(_delta)
+	handle_jump_input(_delta)
+	handle_move_input(_delta)
 	
 	# Finalize physics
-	compute_physics()
+	compute_physics(_delta)
 
 # Basic player functionality section
 func handle_loading_zone_input():
@@ -90,40 +95,40 @@ func handle_loading_zone_input():
 		enter_loading_zone.emit()
 
 func handle_friction():
-	if is_on_floor() || is_on_ceiling():# && force_per_frame.y > 0:
-		velocity.x *= friction
+	if is_on_floor() || is_on_ceiling():
+		velocity.x *= friction_coefficient
 		return
 	
 	if is_on_wall():
-		velocity.y *= friction
+		velocity.y *= friction_coefficient
 		return
 
 func handle_gravity():
-	force_per_frame.y += gravity
+	force_per_frame.y += gravity * mass
 
-func handle_jump_input():
+func handle_jump_input(delta):
 	if Input.is_action_just_pressed("jump"):
 		if has_jump:
 			if pewter_unlocked:
-				force_per_frame.y -= (jump_force * 1.2)
+				force_per_frame.y -= (jump_speed / delta) * 1.2 * mass
 			else:
-				force_per_frame.y -= jump_force
+				force_per_frame.y -= (jump_speed / delta) * mass
 			has_jump = false
 
-func handle_move_input():
+func handle_move_input(delta):
 	var direction = Input.get_axis("left", "right")
 	if has_jump:
 		if direction:
-			force_per_frame.x = direction * move_force
+			force_per_frame.x = direction * mass * (movement_speed / delta)
 
-func handle_throw_coin_input():
+func handle_throw_coin_input(delta):
 	if Input.is_action_just_pressed("throw_coin"):
 		var direction = (get_viewport().get_mouse_position() - self.get_global_transform_with_canvas().origin).normalized()
 		var coin = preload("res://Prefabs/coin.tscn").instantiate()
 		
 		get_tree().root.get_child(0).add_child(coin)
 		coin.position = self.position + (direction * 35) # Math here to make spawning location work. Can't spawn inside floors or walls but need 360 degree for in air
-		coin.apply_force(direction * throw_force)
+		coin.apply_force(direction * coin.mass * (throw_speed / delta))
 
 # Allomancy section
 func handle_iron_input():
@@ -178,9 +183,9 @@ func handle_brass_input():
 		brass_released.emit()
 
 # Helpers
-func compute_physics():
+func compute_physics(delta):
 	handle_gravity()
-	velocity += force_per_frame / mass
+	velocity += force_per_frame * (delta / mass)
 	handle_friction()
 	move_and_slide()
 	force_per_frame = Vector2(0, 0)
@@ -213,9 +218,9 @@ func get_stunned():
 	is_stunned = true
 	stun_timer = stun_time
 
-func stun_update():
+func stun_update(_delta):
 	stun_timer -= 1
-	compute_physics()
+	compute_physics(_delta)
 	if stun_timer <= 0:
 		is_stunned = false
 
