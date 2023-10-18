@@ -9,7 +9,7 @@ size = Vector2(32, 48)
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_6wrau"]
 size = Vector2(32, 48)
 
-[node name="Player" type="CharacterBody2D" groups=["Player"]]
+[node name="Player" type="CharacterBody2D"]
 top_level = true
 collision_layer = 2
 slide_on_ceiling = false

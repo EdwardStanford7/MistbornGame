@@ -8,7 +8,7 @@ enum AI_mode{
 	aggressive
 }
 
-var current_AI = AI_mode.normal
+var current_AI := AI_mode.normal
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta):

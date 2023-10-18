@@ -1,3 +1,4 @@
+class_name Player
 extends CharacterBody2D
 
 signal enter_loading_zone
@@ -6,22 +7,22 @@ signal zinc_released
 signal brass_released
 
 # Progression Abilites
-static var steel_unlocked = false
-static var tin_unlocked = false
-static var pewter_unlocked = false
-static var zinc_unlocked = false
-static var brass_unlocked = false
-static var copper_unlocked = false
-static var bronze_unlocked = false
-static var cadmium_unlocked = false
-static var bendalloy_unlocked = false
-static var gold_unlocked = false
-static var electrum_unlocked = false
-static var chromium_unlocked = false
-static var nicrosil_unlocked = false
-static var aluminum_unlocked = false
-static var duralumin_unlocked = false
-static var atium_unlocked = false
+static var steel_unlocked := false
+static var tin_unlocked := false
+static var pewter_unlocked := false
+static var zinc_unlocked := false
+static var brass_unlocked := false
+static var copper_unlocked := false
+static var bronze_unlocked := false
+static var cadmium_unlocked := false
+static var bendalloy_unlocked := false
+static var gold_unlocked := false
+static var electrum_unlocked := false
+static var chromium_unlocked := false
+static var nicrosil_unlocked := false
+static var aluminum_unlocked := false
+static var duralumin_unlocked := false
+static var atium_unlocked := false
 
 # Parameters
 @export var friction_coefficient: float
@@ -42,14 +43,14 @@ static var atium_unlocked = false
 @export var coyote_time: int
 
 # Instance variables
-var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 var force_per_frame: Vector2
 var selected_metal
-var tin_active: = false
-var is_stunned = false
-var stun_timer = 0
-var has_jump = false
-var coyote_timer = 0
+var tin_active := false
+var is_stunned := false
+var stun_timer := 0
+var has_jump := false
+var coyote_timer := 0
 
 func _ready():
 	# Check if tin light needs to be enabled or not
@@ -116,15 +117,15 @@ func handle_jump_input(delta):
 			has_jump = false
 
 func handle_move_input(delta):
-	var direction = Input.get_axis("left", "right")
+	var direction := Input.get_axis("left", "right")
 	if has_jump:
 		if direction:
 			force_per_frame.x = direction * mass * (movement_speed / delta)
 
 func handle_throw_coin_input(delta):
 	if Input.is_action_just_pressed("throw_coin"):
-		var direction = (get_viewport().get_mouse_position() - self.get_global_transform_with_canvas().origin).normalized()
-		var coin = preload("res://Prefabs/coin.tscn").instantiate()
+		var direction := (get_viewport().get_mouse_position() - self.get_global_transform_with_canvas().origin).normalized()
+		var coin := preload("res://Prefabs/coin.tscn").instantiate()
 		
 		get_tree().root.get_child(0).add_child(coin)
 		coin.position = self.position + (direction * 35) # Math here to make spawning location work. Can't spawn inside floors or walls but need 360 degree for in air
@@ -136,7 +137,7 @@ func handle_iron_input():
 		return
 	
 	if Input.is_action_pressed("iron"):
-		if selected_metal.is_in_group("Coin"):
+		if selected_metal is Coin:
 			selected_metal.connect_player(self)
 		force_per_frame += selected_metal.pull(position, pull_push_force, mass)
 	if Input.is_action_just_released("iron"):
@@ -194,11 +195,11 @@ func apply_force(force: Vector2):
 	force_per_frame += force
 
 func get_target_from_group(group: String) -> Object:
-	var distance_away = INF
+	var distance_away := INF
 	var selected_node = null
 	
 	for object in get_tree().get_nodes_in_group(group):
-		var distance = get_viewport().get_mouse_position().distance_to(object.get_global_transform_with_canvas().origin)
+		var distance := get_viewport().get_mouse_position().distance_to(object.get_global_transform_with_canvas().origin)
 		if distance < distance_away && distance < 75:
 			distance_away = distance
 			selected_node = object;
