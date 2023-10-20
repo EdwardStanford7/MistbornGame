@@ -12,6 +12,7 @@ func _integrate_forces(state): # Deal with transfering forces back to the player
 	if player:
 		var net_force: Vector2 = (state.linear_velocity - previous_linear_velocity) / state.step * mass
 		var unknown_force := net_force - force_since_last_frame
+	
 		player.apply_force(unknown_force)
 	
 	previous_linear_velocity = state.linear_velocity

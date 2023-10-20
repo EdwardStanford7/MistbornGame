@@ -11,7 +11,7 @@ func _ready():
 	self.body_exited.connect(_on_body_exited)
 
 func _on_body_entered(other):
-	if other.is_in_group("Player"):
+	if other is Player:
 		player = other
 		other.enter_loading_zone.connect(_on_enter)
 

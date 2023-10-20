@@ -149,7 +149,7 @@ func handle_steel_input():
 		return
 	
 	if Input.is_action_pressed("steel"):
-		if selected_metal.is_in_group("Coin"):
+		if selected_metal is Coin:
 			selected_metal.connect_player(self)
 		force_per_frame += selected_metal.push(position, pull_push_force, mass)
 	if Input.is_action_just_released("steel"):
