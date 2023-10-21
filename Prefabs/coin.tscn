@@ -16,6 +16,7 @@ contact_monitor = true
 can_sleep = false
 lock_rotation = true
 script = ExtResource("1_l2p76")
+allomancy_scaling_factor = 0.001
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_rydrl")

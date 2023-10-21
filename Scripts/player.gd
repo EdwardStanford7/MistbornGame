@@ -128,6 +128,7 @@ func handle_throw_coin_input(delta):
 		var coin := preload("res://Prefabs/coin.tscn").instantiate()
 		
 		get_tree().root.get_child(0).add_child(coin)
+		metal_allomancy_released.connect(coin.allomancy_released)
 		coin.position = self.position + (direction * 35) # Math here to make spawning location work. Can't spawn inside floors or walls but need 360 degree for in air
 		coin.apply_force(direction * coin.mass * (throw_speed / delta))
 

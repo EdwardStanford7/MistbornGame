@@ -1,6 +1,8 @@
 class_name Coin
 extends RigidBody2D
 
+@export var allomancy_scaling_factor: float
+
 var previous_linear_velocity : Vector2 = Vector2.ZERO
 var force_since_last_frame: Vector2 = Vector2.ZERO
 var player: CharacterBody2D
@@ -10,7 +12,7 @@ func _ready():
 
 func _integrate_forces(state): # Deal with transfering forces back to the player here
 	if player:
-		var net_force: Vector2 = (state.linear_velocity - previous_linear_velocity) / state.step * mass
+		var net_force: Vector2 = (state.linear_velocity - previous_linear_velocity) * (1 / allomancy_scaling_factor) / state.step * mass
 		var unknown_force := net_force - force_since_last_frame
 	
 		player.apply_force(unknown_force)
@@ -23,7 +25,7 @@ func pull(player_position: Vector2, pull_strength: float, player_mass: float) ->
 	var distance := (position - player_position).length()
 	
 	force_since_last_frame += pull_strength * player_mass * direction / distance
-	self.apply_force(pull_strength * player_mass * direction / distance)
+	self.apply_force(pull_strength * allomancy_scaling_factor * player_mass * direction / distance)
 	return pull_strength * mass * -direction / distance
 
 func push(player_position: Vector2, push_strength: float, player_mass: float) -> Vector2:
@@ -31,7 +33,7 @@ func push(player_position: Vector2, push_strength: float, player_mass: float) ->
 	var distance := (position - player_position).length()
 	
 	force_since_last_frame += push_strength * player_mass * direction / distance
-	self.apply_force(push_strength * player_mass * direction / distance)
+	self.apply_force(push_strength * allomancy_scaling_factor * player_mass * direction / distance)
 	return push_strength * mass * -direction / distance
 
 func on_body_entered(other):
@@ -42,7 +44,6 @@ func connect_player(caller: CharacterBody2D):
 	if player:
 		return
 	self.player = caller
-	player.metal_allomancy_released.connect(allomancy_released)
 
 func allomancy_released():
 	player = null
