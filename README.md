@@ -2,11 +2,7 @@ This is just a personal project of me attempting to make a metroidvania game off
 
 Ideas/TODOS
 
-Overhaul physics
-
-Ceiling hang bug if still there once physics done
-
-Copper/Bronze: Bronze maybe some sort of tracking system like the scent trails in twilight princess Copper idk except maybe a certain enemy type that can track when you use metals or something who knows.
+Copper/Bronze: Bronze maybe some sort of tracking system like the scent trails in twilight princess Copper idk except maybe a certain enemy type that can track when you use metals or something who knows. Some sort of stealth mechanic/section?
 
 Cadmium/Bendalloy: Cadmium not sure, Bendalloy freeze enemies around you for certain ammount of time (have to decide whether to do a bubble effect).
 
