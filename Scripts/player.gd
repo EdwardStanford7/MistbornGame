@@ -26,21 +26,22 @@ static var atium_unlocked := false
 
 # Parameters
 @export var friction_coefficient: float
-## meters per second
+## This value is in meters per second
 @export var movement_speed: int
-## meters per second
+## This value is in meters per second
 @export var jump_speed: int
-## newtons ig doesn't really matter for this one
+## This value is in newtons
 @export var pull_push_force: int
-## kilograms
+## This value is inkilograms
 @export var mass: int
-## newtons again prolly
+## This value is in newtons
 @export var throw_speed: int
-@export var health: int
 ## This value is in physics update frames (1/60 second)
 @export var stun_time: int
 ## This value is in physics update frames (1/60 second)
 @export var coyote_time: int
+@export var health: int
+@export var pewter_scaling: float
 
 # Instance variables
 var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -111,7 +112,7 @@ func handle_jump_input(delta):
 	if Input.is_action_just_pressed("jump"):
 		if has_jump:
 			if pewter_unlocked:
-				force_per_frame.y -= (jump_speed / delta) * 1.2 * mass
+				force_per_frame.y -= (jump_speed / delta) * pewter_scaling * mass
 			else:
 				force_per_frame.y -= (jump_speed / delta) * mass
 			has_jump = false
@@ -125,7 +126,7 @@ func handle_move_input(delta):
 func handle_throw_coin_input(delta):
 	if Input.is_action_just_pressed("throw_coin"):
 		var direction := (get_viewport().get_mouse_position() - self.get_global_transform_with_canvas().origin).normalized()
-		var coin := preload("res://Prefabs/coin.tscn").instantiate()
+		var coin: Coin = load("res://Prefabs/coin.tscn").instantiate()
 		
 		get_tree().root.get_child(0).add_child(coin)
 		metal_allomancy_released.connect(coin.allomancy_released)
@@ -140,7 +141,12 @@ func handle_iron_input():
 	if Input.is_action_pressed("iron"):
 		if selected_metal is Coin:
 			selected_metal.connect_player(self)
-		force_per_frame += selected_metal.pull(position, pull_push_force, mass)
+		
+		if pewter_unlocked:
+			force_per_frame += selected_metal.pull(position, pull_push_force * pewter_scaling, mass)
+		else:
+			force_per_frame += selected_metal.pull(position, pull_push_force, mass)
+	
 	if Input.is_action_just_released("iron"):
 		selected_metal = null
 		metal_allomancy_released.emit()
@@ -152,7 +158,13 @@ func handle_steel_input():
 	if Input.is_action_pressed("steel"):
 		if selected_metal is Coin:
 			selected_metal.connect_player(self)
-		force_per_frame += selected_metal.push(position, pull_push_force, mass)
+		
+		if pewter_unlocked:
+			force_per_frame += selected_metal.push(position, pull_push_force * pewter_scaling, mass)
+		else:
+			force_per_frame += selected_metal.push(position, pull_push_force, mass)
+
+	
 	if Input.is_action_just_released("steel"):
 		selected_metal = null
 		metal_allomancy_released.emit()
