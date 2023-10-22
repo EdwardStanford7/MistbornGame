@@ -122,7 +122,7 @@ func handle_jump_input(delta):
 
 func handle_move_input(delta):
 	var direction := Input.get_axis("left", "right")
-	if has_jump:
+	if is_on_floor() || is_on_ceiling() || is_on_wall():
 		if direction:
 			force_per_frame.x = direction * mass * (movement_speed / delta)
 
