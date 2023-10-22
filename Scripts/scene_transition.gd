@@ -1,3 +1,4 @@
+class_name SceneTransition
 extends Area2D
 
 @export var scene_to_load: String

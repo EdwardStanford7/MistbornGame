@@ -5,6 +5,7 @@ signal enter_loading_zone
 signal metal_allomancy_released
 signal zinc_released
 signal brass_released
+signal bendalloy_released
 
 # Progression Abilites
 static var steel_unlocked := false
@@ -48,6 +49,7 @@ var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 var force_per_frame: Vector2
 var selected_metal
 var tin_active := false
+var bendalloy_active := false
 var is_stunned := false
 var stun_timer := 0
 var has_jump := false
@@ -81,6 +83,8 @@ func _physics_process(_delta):
 		handle_zinc_input()
 	if brass_unlocked:
 		handle_brass_input()
+	if bendalloy_unlocked:
+		handle_bendalloy_input()
 	
 	# Other actions
 	handle_loading_zone_input()
@@ -195,6 +199,18 @@ func handle_brass_input():
 			brass_released.connect(enemy.reset_AI)
 	elif Input.is_action_just_released("brass"):
 		brass_released.emit()
+
+func handle_bendalloy_input():
+	if Input.is_action_just_pressed("bendalloy"):
+		if bendalloy_active:
+			bendalloy_released.emit()
+			bendalloy_active = false
+		else:
+			var speed_bubble: SpeedBubble = load("res://Prefabs/speed_bubble.tscn").instantiate()
+			speed_bubble.position = self.position
+			bendalloy_released.connect(speed_bubble.destroy)
+			get_tree().root.get_child(0).add_child(speed_bubble)
+			bendalloy_active = true
 
 # Helpers
 func compute_physics(delta):

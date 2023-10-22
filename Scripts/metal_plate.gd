@@ -1,3 +1,4 @@
+class_name MetalPlate
 extends StaticBody2D
 
 @export var mass: float
