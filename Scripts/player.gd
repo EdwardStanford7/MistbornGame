@@ -5,7 +5,6 @@ signal enter_loading_zone
 signal metal_allomancy_released
 signal zinc_released
 signal brass_released
-signal bendalloy_released
 
 # Progression Abilites
 static var steel_unlocked := false
@@ -49,7 +48,7 @@ var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 var force_per_frame: Vector2
 var selected_metal
 var tin_active := false
-var bendalloy_active := false
+var speed_bubble: SpeedBubble = null
 var is_stunned := false
 var stun_timer := 0
 var has_jump := false
@@ -132,6 +131,9 @@ func handle_throw_coin_input(delta):
 		var direction := (get_viewport().get_mouse_position() - self.get_global_transform_with_canvas().origin).normalized()
 		var coin: Coin = load("res://Prefabs/coin.tscn").instantiate()
 		
+		if is_instance_valid(speed_bubble):
+			speed_bubble.destroyed.connect(coin.deactivate_slow_time)
+		
 		get_tree().root.get_child(0).add_child(coin)
 		metal_allomancy_released.connect(coin.allomancy_released)
 		coin.position = self.position + (direction * 35) # Math here to make spawning location work. Can't spawn inside floors or walls but need 360 degree for in air
@@ -202,15 +204,23 @@ func handle_brass_input():
 
 func handle_bendalloy_input():
 	if Input.is_action_just_pressed("bendalloy"):
-		if bendalloy_active:
-			bendalloy_released.emit()
-			bendalloy_active = false
+		if speed_bubble:
+			speed_bubble.destroy()
+			speed_bubble = null
 		else:
-			var speed_bubble: SpeedBubble = load("res://Prefabs/speed_bubble.tscn").instantiate()
-			speed_bubble.position = self.position
-			bendalloy_released.connect(speed_bubble.destroy)
+			speed_bubble = load("res://Prefabs/speed_bubble.tscn").instantiate()
 			get_tree().root.get_child(0).add_child(speed_bubble)
-			bendalloy_active = true
+			speed_bubble.position = self.position
+			speed_bubble.destroyed.connect(func(): speed_bubble = null )
+			
+			for enemy in get_tree().get_nodes_in_group("Enemy"):
+				speed_bubble.destroyed.connect(enemy.deactivate_slow_time)
+				enemy.activate_slow_time()
+				
+			for metal in get_tree().get_nodes_in_group("Metal"):
+				if metal is Coin:
+					speed_bubble.destroyed.connect(metal.deactivate_slow_time)
+					metal.activate_slow_time()
 
 # Helpers
 func compute_physics(delta):

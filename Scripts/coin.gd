@@ -6,15 +6,15 @@ extends RigidBody2D
 var previous_linear_velocity : Vector2 = Vector2.ZERO
 var force_since_last_frame: Vector2 = Vector2.ZERO
 var player: CharacterBody2D
+var stored_momentum: Vector2
 
 func _ready():
 	self.body_entered.connect(on_body_entered)
 
-func _integrate_forces(state): # Deal with transfering forces back to the player here
+func _integrate_forces(state):
 	if player:
 		var net_force: Vector2 = (state.linear_velocity - previous_linear_velocity) * (1 / allomancy_scaling_factor) / state.step * mass
 		var unknown_force := net_force - force_since_last_frame
-	
 		player.apply_force(unknown_force)
 	
 	previous_linear_velocity = state.linear_velocity
@@ -47,3 +47,11 @@ func connect_player(caller: CharacterBody2D):
 
 func allomancy_released():
 	player = null
+
+func activate_slow_time():
+	stored_momentum = linear_velocity * mass
+	set_deferred("freeze", true)
+
+func deactivate_slow_time():
+	set_deferred("freeze", false)
+	apply_force(stored_momentum * 30) # Yes this hardcoded 30 is awful but like I'm not smart enough to make it work properly

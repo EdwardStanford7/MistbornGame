@@ -10,6 +10,7 @@ enum AI_mode{
 }
 
 var current_AI := AI_mode.normal
+var stored_momentum: Vector2
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta):
@@ -35,3 +36,11 @@ func change_AI_mode(mode: AI_mode):
 
 func reset_AI():
 	current_AI = AI_mode.normal
+
+func activate_slow_time():
+	stored_momentum = linear_velocity * mass
+	set_deferred("freeze", true)
+
+func deactivate_slow_time():
+	set_deferred("freeze", false)
+	apply_force(stored_momentum * 30) # Yes this hardcoded 30 is awful but like I'm not smart enough to make it work properly

@@ -8,13 +8,14 @@ radius = 3.0
 
 [node name="Coin" type="RigidBody2D" groups=["Metal"]]
 collision_layer = 8
-collision_mask = 31
+collision_mask = 15
 mass = 0.03
 continuous_cd = 2
 max_contacts_reported = 10
 contact_monitor = true
 can_sleep = false
 lock_rotation = true
+freeze_mode = 1
 script = ExtResource("1_vv2u6")
 allomancy_scaling_factor = 0.001
 
