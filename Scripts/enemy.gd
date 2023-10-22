@@ -43,4 +43,4 @@ func activate_slow_time():
 
 func deactivate_slow_time():
 	set_deferred("freeze", false)
-	apply_force(stored_momentum * 30) # Yes this hardcoded 30 is awful but like I'm not smart enough to make it work properly
+	apply_force(stored_momentum * 32) # Yes this hardcoded 32 is awful but like I'm not smart enough to make it work properly
