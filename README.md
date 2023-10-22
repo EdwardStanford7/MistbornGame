@@ -6,7 +6,7 @@ Ideas/TODOS
 
 Copper/Bronze: Bronze maybe some sort of tracking system like the scent trails in twilight princess Copper idk except maybe a certain enemy type that can track when you use metals or something who knows. Some sort of stealth mechanic/section?
 
-Cadmium/Bendalloy: Cadmium not sure, might scrap. One of the benefits of basing this game off of hemalurgy is that useless powers don't have to be included because why would someone seek out a useless power.
+Cadmium not sure, might scrap. One of the benefits of basing this game off of hemalurgy is that useless powers don't have to be included because why would someone seek out a useless power.
 
 Gold/Electrum: Gold for lore exposition dumps? Some sort of amnesia game and gold shows you things that you did in the past? Electrum just make you immune to Atium burning enemies (I think maybe you have input lag when fighting an Atium enemy/boss).
 
