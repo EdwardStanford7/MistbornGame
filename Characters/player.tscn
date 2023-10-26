@@ -20,8 +20,9 @@ jump_speed = 450
 pull_push_force = 150000
 mass = 650
 throw_speed = 750
-stun_time = 60
-coyote_time = 5
+stun_time = 2.0
+coyote_time = 0.1
+allomancy_refresh_time = 5.0
 health = 100
 pewter_scaling = 1.2
 

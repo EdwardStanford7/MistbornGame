@@ -1,0 +1,52 @@
+[gd_scene load_steps=6 format=3 uid="uid://bbjtxxlhs333y"]
+
+[ext_resource type="PackedScene" uid="uid://bhj6vcmatg6vi" path="res://Characters/player.tscn" id="1_but1o"]
+[ext_resource type="PackedScene" uid="uid://bwflfo552mdxe" path="res://Characters/enemy.tscn" id="2_1h6ph"]
+[ext_resource type="PackedScene" uid="uid://4ky7npwoorln" path="res://Prefabs/floor.tscn" id="3_f2y1s"]
+[ext_resource type="PackedScene" uid="uid://jd44661cckq2" path="res://Prefabs/wall.tscn" id="4_eisp8"]
+[ext_resource type="PackedScene" uid="uid://ca3cll143cteb" path="res://Prefabs/scene_transition.tscn" id="5_mos72"]
+
+[node name="EnemyTest" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_but1o")]
+position = Vector2(143, -52)
+stun_time = 0.0
+coyote_time = 0.0
+
+[node name="TestEnemy" parent="." instance=ExtResource("2_1h6ph")]
+position = Vector2(-130, -149)
+
+[node name="TestEnemy2" parent="." instance=ExtResource("2_1h6ph")]
+position = Vector2(306, -249)
+
+[node name="TestEnemy3" parent="." instance=ExtResource("2_1h6ph")]
+position = Vector2(377, -47)
+
+[node name="Floor" parent="." instance=ExtResource("3_f2y1s")]
+position = Vector2(-256, 0)
+
+[node name="Floor3" parent="." instance=ExtResource("3_f2y1s")]
+position = Vector2(-256, -544)
+
+[node name="Floor4" parent="." instance=ExtResource("3_f2y1s")]
+position = Vector2(256, -544)
+
+[node name="Wall" parent="." instance=ExtResource("4_eisp8")]
+position = Vector2(-496, -272)
+
+[node name="Wall2" parent="." instance=ExtResource("4_eisp8")]
+position = Vector2(496, -272)
+
+[node name="Floor2" parent="." instance=ExtResource("3_f2y1s")]
+position = Vector2(256, 0)
+
+[node name="SceneTransition" parent="." instance=ExtResource("5_mos72")]
+position = Vector2(-350, -48)
+scene_to_load = "res://Levels/main.tscn"
+label = "Back To Main"
+
+[node name="Floor5" parent="." instance=ExtResource("3_f2y1s")]
+position = Vector2(-18, -103)
+
+[node name="Floor6" parent="." instance=ExtResource("3_f2y1s")]
+position = Vector2(206, -198)

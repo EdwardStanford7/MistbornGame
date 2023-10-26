@@ -12,6 +12,6 @@ Gold/Electrum: Gold for lore exposition dumps? Some sort of amnesia game and gol
 
 Chromium/Nicrosil: Chromium maybe could do something with temporarily inhibiting an allomantic enemy, Nicrosil probably only makes sense in multiplayer setting.
 
-Aluminum/Duralumin: Alluminum accidentally buring could wipe your abilities (just temporarily inhibit powers), Duralumin enhance your powers for a certain time and then wipe your abilities.
+Aluminum/Duralumin: Aluminum is implemented because Duralumin needs the same  functionality but probably will end up scrapping it. Duralumin enhance your powers for a certain time and then wipe your abilities.
 
 Atium: Give enemies "input lag"

@@ -11,6 +11,8 @@ script = ExtResource("1_fxvqu")
 
 [node name="Player" parent="." instance=ExtResource("3_ugfnl")]
 position = Vector2(-39, -42)
+stun_time = 0.0
+coyote_time = 0.0
 
 [node name="Floor" parent="." instance=ExtResource("1_8mn4l")]
 position = Vector2(512, 0)
@@ -47,5 +49,5 @@ label = "Tin Test Level"
 
 [node name="SceneTransition3" parent="." instance=ExtResource("4_x1iks")]
 position = Vector2(-300, -48)
-scene_to_load = "res://Levels/zinc_brass_test.tscn"
-label = "Zinc Brass Test Level"
+scene_to_load = "res://Levels/enemy_test.tscn"
+label = "Basic Enemy Test Level"

@@ -1,6 +1,7 @@
 class_name Player
 extends CharacterBody2D
 
+# Anytime you add an allomantic release signal here, remember to add it to the stun and wipe allomancy functions
 signal enter_loading_zone
 signal metal_allomancy_released
 signal zinc_released
@@ -36,10 +37,12 @@ static var atium_unlocked := false
 @export var mass: int
 ## This value is in newtons
 @export var throw_speed: int
-## This value is in physics update frames (1/60 second)
-@export var stun_time: int
-## This value is in physics update frames (1/60 second)
-@export var coyote_time: int
+## This value is seconds
+@export var stun_time: float
+## This value is seconds
+@export var coyote_time: float
+## This value is in seconds
+@export var allomancy_refresh_time: float
 @export var health: int
 @export var pewter_scaling: float
 
@@ -50,9 +53,11 @@ var selected_metal
 var tin_active := false
 var speed_bubble: SpeedBubble = null
 var is_stunned := false
-var stun_timer := 0
+var stun_timer := 0.0
 var has_jump := false
-var coyote_timer := 0
+var coyote_timer := 0.0
+var allomancy_wiped := false
+var allomancy_refresh_timer := 0.0
 
 func _ready():
 	# Check if tin light needs to be enabled or not
@@ -62,11 +67,21 @@ func _ready():
 	for enemy in get_tree().get_nodes_in_group("Stunner"):
 		enemy.stun_player.connect(get_stunned)
 
-func _physics_process(_delta):
-	coyote_update()
+func _physics_process(delta):
+	coyote_update(delta)
 	
 	if is_stunned:
-		stun_update(_delta)
+		stun_update(delta)
+		return
+	
+	# Basic actions
+	handle_loading_zone_input()
+	handle_throw_coin_input(delta)
+	handle_jump_input(delta)
+	handle_move_input(delta)
+	
+	if allomancy_wiped:
+		allomancy_refresh_update(delta)
 		return
 	
 	# Allomantic actions
@@ -84,15 +99,11 @@ func _physics_process(_delta):
 		handle_brass_input()
 	if bendalloy_unlocked:
 		handle_bendalloy_input()
-	
-	# Other actions
-	handle_loading_zone_input()
-	handle_throw_coin_input(_delta)
-	handle_jump_input(_delta)
-	handle_move_input(_delta)
+	if aluminum_unlocked:
+		handle_aluminum_input()
 	
 	# Finalize physics
-	compute_physics(_delta)
+	compute_physics(delta)
 
 # Basic player functionality section
 func handle_loading_zone_input():
@@ -185,7 +196,7 @@ func handle_tin_input():
 			tin_active = true
 
 func handle_zinc_input():
-	if Input.is_action_just_pressed("zinc"):
+	if Input.is_action_pressed("zinc"):
 		var enemy = get_target_from_group("Enemy")
 		if enemy:
 			enemy.change_AI_mode(enemy.AI_mode.aggressive)
@@ -194,7 +205,7 @@ func handle_zinc_input():
 		zinc_released.emit()
 
 func handle_brass_input():
-	if Input.is_action_just_pressed("brass"):
+	if Input.is_action_pressed("brass"):
 		var enemy = get_target_from_group("Enemy")
 		if enemy:
 			enemy.change_AI_mode(enemy.AI_mode.passive)
@@ -221,6 +232,10 @@ func handle_bendalloy_input():
 				if metal is Coin:
 					speed_bubble.destroyed.connect(metal.deactivate_slow_time)
 					metal.activate_slow_time()
+
+func handle_aluminum_input():
+	if Input.is_action_just_pressed("aluminum"):
+		wipe_allomancy()
 
 # Helpers
 func compute_physics(delta):
@@ -258,18 +273,32 @@ func get_stunned():
 	is_stunned = true
 	stun_timer = stun_time
 
-func stun_update(_delta):
-	stun_timer -= 1
-	compute_physics(_delta)
+func wipe_allomancy():
+	metal_allomancy_released.emit()
+	zinc_released.emit()
+	brass_released.emit()
+	
+	allomancy_wiped = true
+	allomancy_refresh_timer = allomancy_refresh_time
+
+func stun_update(delta):
+	stun_timer -= delta
+	compute_physics(delta)
 	if stun_timer <= 0:
 		is_stunned = false
 
-func coyote_update():
+func allomancy_refresh_update(delta):
+	allomancy_refresh_timer -= delta
+	compute_physics(delta)
+	if allomancy_refresh_timer <= 0:
+		allomancy_wiped = false
+
+func coyote_update(delta):
 	if is_grounded():
 		has_jump = true
 		coyote_timer = coyote_time
 	
 	if !(is_on_floor() || is_on_wall() || is_on_ceiling()) && coyote_timer > 0:
-		coyote_timer -= 1
+		coyote_timer -= delta
 		if coyote_timer == 0:
 			has_jump = false
