@@ -15,13 +15,10 @@ static var zinc_unlocked := false
 static var brass_unlocked := false
 static var copper_unlocked := false
 static var bronze_unlocked := false
-static var cadmium_unlocked := false
 static var bendalloy_unlocked := false
 static var gold_unlocked := false
 static var electrum_unlocked := false
 static var chromium_unlocked := false
-static var nicrosil_unlocked := false
-static var aluminum_unlocked := false
 static var duralumin_unlocked := false
 static var atium_unlocked := false
 
@@ -99,8 +96,8 @@ func _physics_process(delta):
 		handle_brass_input()
 	if bendalloy_unlocked:
 		handle_bendalloy_input()
-	if aluminum_unlocked:
-		handle_aluminum_input()
+	if duralumin_unlocked:
+		handle_duralumin_input()
 	
 	# Finalize physics
 	compute_physics(delta)
@@ -180,7 +177,7 @@ func handle_steel_input():
 			force_per_frame += selected_metal.push(position, pull_push_force * pewter_scaling, mass)
 		else:
 			force_per_frame += selected_metal.push(position, pull_push_force, mass)
-
+	
 	
 	if Input.is_action_just_released("steel"):
 		selected_metal = null
@@ -233,8 +230,8 @@ func handle_bendalloy_input():
 					speed_bubble.destroyed.connect(metal.deactivate_slow_time)
 					metal.activate_slow_time()
 
-func handle_aluminum_input():
-	if Input.is_action_just_pressed("aluminum"):
+func handle_duralumin_input(): #finish this
+	if Input.is_action_just_pressed("duralumin"):
 		wipe_allomancy()
 
 # Helpers
